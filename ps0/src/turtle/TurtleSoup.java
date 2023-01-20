@@ -107,13 +107,17 @@ public class TurtleSoup {
      */
     public static List<Double> calculateHeadings(List<Integer> xCoords, List<Integer> yCoords) {
         List<Double> adjustments = new ArrayList<>();
-        for (int i = 0; i < xCoords.size() - 1; i++) {
-            double currentHeading = adjustments.stream().reduce(0.0, Double::sum);
+        int adjustmentCount = xCoords.size() - 1;
+        double currentHeading = 0;
+        for (int i = 0; i < adjustmentCount; i++) {
             int currentX = xCoords.get(i);
             int currentY = yCoords.get(i);
             int targetX = xCoords.get(i + 1);
             int targetY = yCoords.get(i + 1);
-            adjustments.add(calculateHeadingToPoint(currentHeading, currentX, currentY, targetX, targetY));
+            double adjustment = calculateHeadingToPoint(currentHeading, currentX, currentY, targetX, targetY);
+            adjustments.add(adjustment);
+            currentHeading += adjustment;
+            currentHeading = (currentHeading + 360) % 360;
         }
         return adjustments;
     }
